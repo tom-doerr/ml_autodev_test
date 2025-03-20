@@ -10,7 +10,7 @@ def run_training_pipeline() -> None:
     """End-to-end ML training pipeline"""
     # Load data
     iris: Bunch = load_iris()
-    X = pd.DataFrame(iris.data, columns=iris['feature_names'])
+    X = pd.DataFrame(iris['data'], columns=iris['feature_names'])
     y = iris['target']
     
     # Split data
