@@ -4,8 +4,8 @@ import json
 import pickle
 from pathlib import Path
 
-# Add project root to Python path
-root_dir = Path(__file__).parent.parent.parent.resolve()
+# Add project root to Python path (matches conftest.py setup)
+root_dir = Path(__file__).parent.parent.resolve()
 sys.path.insert(0, str(root_dir))
 
 from pipeline.train import run_training_pipeline
