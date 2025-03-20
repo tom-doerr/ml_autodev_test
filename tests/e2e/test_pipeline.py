@@ -8,7 +8,7 @@ from pathlib import Path
 root_dir = Path(__file__).parent.parent.resolve()
 sys.path.insert(0, str(root_dir))
 
-from pipeline.train import run_training_pipeline
+from pipeline import run_training_pipeline
 
 
 def test_pipeline_execution():
