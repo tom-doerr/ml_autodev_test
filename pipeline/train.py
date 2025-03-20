@@ -8,7 +8,12 @@ from sklearn.utils import Bunch
 
 
 def run_training_pipeline() -> None:
-    """End-to-end ML training pipeline"""
+    """End-to-end ML training pipeline
+    
+    Saves outputs:
+    - model.pkl: Trained Decision Tree classifier
+    - metrics.json: Training and test accuracy metrics
+    """
     # Load data
     iris: Bunch = load_iris()
     X = pd.DataFrame(iris["data"], columns=iris["feature_names"])
@@ -27,10 +32,14 @@ def run_training_pipeline() -> None:
     train_acc = model.score(X_train, y_train)
     test_acc = model.score(X_test, y_test)
 
-    # Save artifacts
-    with open("model.pkl", "wb") as f:
-        pickle.dump(model, f)
-
-    metrics = {"train_accuracy": float(train_acc), "test_accuracy": float(test_acc)}
-    with open("metrics.json", "w", encoding="utf-8") as f:
-        json.dump(metrics, f)
+    # Save artifacts with error handling
+    try:
+        with open("model.pkl", "wb") as f:
+            pickle.dump(model, f)
+        
+        metrics = {"train_accuracy": float(train_acc), "test_accuracy": float(test_acc)}
+        with open("metrics.json", "w", encoding="utf-8") as f:
+            json.dump(metrics, f, indent=2)
+            
+    except IOError as e:
+        raise RuntimeError(f"Failed to save pipeline artifacts: {str(e)}") from e

@@ -1,4 +1,6 @@
 import os
+import json
+import pickle
 from pipeline.train import run_training_pipeline
 
 
@@ -17,3 +19,20 @@ def test_pipeline_execution():
     assert os.path.exists("metrics.json"), "Metrics file not created"
     assert os.path.getsize("model.pkl") > 1024, "Model file seems too small"
     assert os.path.getsize("metrics.json") > 10, "Metrics file seems empty"
+
+    # Verify metric contents
+    with open("metrics.json") as f:
+        metrics = json.load(f)
+    
+    assert "train_accuracy" in metrics, "Missing train accuracy in metrics"
+    assert "test_accuracy" in metrics, "Missing test accuracy in metrics"
+    assert 0 <= metrics["train_accuracy"] <= 1, "Invalid train accuracy value"
+    assert 0 <= metrics["test_accuracy"] <= 1, "Invalid test accuracy value"
+    
+    # Verify model can predict
+    with open("model.pkl", "rb") as f:
+        model = pickle.load(f)
+    
+    sample_input = [[5.8, 3.0, 3.8, 1.2]]  # Sample Iris features
+    prediction = model.predict(sample_input)
+    assert prediction.shape == (1,), "Invalid prediction shape"
