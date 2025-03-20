@@ -1,6 +1,13 @@
 import os
+import sys
 import json
 import pickle
+from pathlib import Path
+
+# Add project root to Python path
+root_dir = Path(__file__).parent.parent.parent.resolve()
+sys.path.insert(0, str(root_dir))
+
 from pipeline.train import run_training_pipeline
 
 
@@ -21,7 +28,7 @@ def test_pipeline_execution():
     assert os.path.getsize("metrics.json") > 10, "Metrics file seems empty"
 
     # Verify metric contents
-    with open("metrics.json") as f:
+    with open("metrics.json", encoding="utf-8") as f:
         metrics = json.load(f)
     
     assert "train_accuracy" in metrics, "Missing train accuracy in metrics"
