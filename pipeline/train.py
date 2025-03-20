@@ -4,14 +4,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 import pickle
 import json
-import os
+from sklearn.utils import Bunch
 
-def run_training_pipeline():
+def run_training_pipeline() -> None:
     """End-to-end ML training pipeline"""
     # Load data
-    iris = load_iris()
-    X = pd.DataFrame(iris.data, columns=iris.feature_names)
-    y = iris.target
+    iris: Bunch = load_iris()
+    X = pd.DataFrame(iris.data, columns=iris['feature_names'])
+    y = iris['target']
     
     # Split data
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -32,5 +32,5 @@ def run_training_pipeline():
         "train_accuracy": float(train_acc),
         "test_accuracy": float(test_acc)
     }
-    with open("metrics.json", "w") as f:
+    with open("metrics.json", "w", encoding='utf-8') as f:
         json.dump(metrics, f)
